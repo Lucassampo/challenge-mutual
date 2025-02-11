@@ -1,16 +1,28 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private jwtService: JwtService,
+  ) {}
 
-  async validateUser(email: string): Promise<any> {
-    const user = await this.usersService.findByEmail(email);
-    if (user) {
-      const {...result } = user;  // Excluir la contraseña de la respuesta
-      return result;  // Devuelve el usuario sin la contraseña
+  // Método que valida el email y genera el JWT
+  async loginWithEmail(email: string) {
+    // Buscar el usuario por email
+    const user = await this.userService.findByEmail(email);
+    if (!user) {
+      throw new Error('Usuario no encontrado');
     }
-    throw new UnauthorizedException('Usuario no encontrado');
+
+    // Generar un JWT con el email y el rol (si lo tienes)
+    const payload = { email: user.email, role: user.role_id }; // O cualquier otro campo que quieras
+    const accessToken = this.jwtService.sign(payload);
+
+    return {
+      access_token: accessToken, // El token JWT
+    };
   }
 }

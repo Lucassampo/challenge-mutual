@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './create-user.dto';
 import { ExternalUserService } from './external-user.service';
@@ -31,9 +31,8 @@ export class UserController {
     return this.userService.migrateUsers(externalUsers.results);
   }
 
-
-  //  @Post()
-  //  create(@Body() body: { name: string; email: string }) {
-  //    return this.userService.create(body.name, body.email);
-  //  }
+  @Delete(':id')
+  async deleteUser(@Param('id') id: number) {
+    return this.userService.deleteUser(id);
+  }
 }

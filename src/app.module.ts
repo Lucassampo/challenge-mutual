@@ -9,6 +9,7 @@ import { OrdersModule } from './orders/order.module';
 import { RolesModule } from './roles/roles.module';
 import { Role } from './roles/role.entity';
 import { HttpModule } from '@nestjs/axios';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -25,7 +26,7 @@ import { HttpModule } from '@nestjs/axios';
       synchronize: false,
       logger:'debug'
     }),
-    UserModule, OrdersModule, RolesModule,HttpModule,
+    UserModule, OrdersModule, RolesModule,HttpModule,AuthModule,
   ],
   controllers: [AppController], 
   providers: [AppService],
